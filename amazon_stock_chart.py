@@ -1,4 +1,5 @@
 import yfinance as yf
+import pandas as pd
 import matplotlib.pyplot as plt
 
 # Define the ticker symbol for Amazon
@@ -8,10 +9,14 @@ symbol = "AMZN"
 start_date = "2015-01-01"
 end_date = "2021-12-31"
 
-# Retrieve the historical data for the stock price and revenue of Amazon
+# Retrieve the historical data for the stock price of Amazon
 data = yf.download(symbol, start=start_date, end=end_date)
-revenue = data["Revenue"].rolling(window=4).sum()
-market_cap = data["Market Cap"]
+
+# Read the market capitalization and revenue data from a CSV file
+# You can download the CSV file from the SEC website or other financial data providers
+financials = pd.read_csv("https://www.sec.gov/files/company_tickers/ticker_master.csv")
+market_cap = financials[financials["ticker"] == symbol]["market_cap"].values[0]
+revenue = financials[financials["ticker"] == symbol]["revenue"].values[0]
 
 # Calculate the PS ratio
 ps_ratio = market_cap / revenue
@@ -26,7 +31,7 @@ axs[0].set_ylabel("Stock Price ($)")
 axs[0].grid(True)
 
 # Plot the PS ratio as the second subplot
-axs[1].fill_between(ps_ratio.index, ps_ratio, alpha=0.3)
+axs[1].fill_between(data.index, ps_ratio, alpha=0.3)
 axs[1].plot(ps_ratio, color="blue")
 axs[1].set_ylabel("Price-to-Sales Ratio")
 axs[1].grid(True)
