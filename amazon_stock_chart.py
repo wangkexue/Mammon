@@ -1,11 +1,21 @@
+# Tested on Ubuntu. Require GTK3.
+"""
+sudo apt-get update
+sudo apt-get install -y python3-gi python3-gi-cairo gir1.2-gtk-3.0
+"""
+
 import yfinance as yf
 import pandas as pd
+import matplotlib
+
+# Set the backend to TkAgg
+matplotlib.use('GTK3Agg')
 import matplotlib.pyplot as plt
 
 # Download Amazon's stock data
 ticker = "AMZN"
 start_date = "2020-01-01"
-end_date = "2023-01-01"
+end_date = "2023-03-31"
 
 data = yf.download(ticker, start=start_date, end=end_date)
 
